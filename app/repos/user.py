@@ -1,6 +1,8 @@
 from fastapi import HTTPException  
 from ..models import models
 from datetime import datetime
+import json 
+
 
 def create_user(request,db):
     username = db.query(models.UserModel).filter_by(name=request.user_name).first()
@@ -55,6 +57,20 @@ def update_user(id,request,db):
     db.commit()
 
     return {'message': f'User {get_user.name} been successfully updated'} , 200
-    
+
+
+def serialize(obj):
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    raise TypeError(f"{type(obj)} not serializable")
+
+def get_user_teams(user_id: int, db,TeamListResponse):
+    user_teams = db.query(models.TeamModel).filter(models.TeamModel.members.any(id=user_id)).all()
+    team_info  = [TeamListResponse(name=team.name, description=team.description, creation_time=team.creation_time,admin=team.admin_id) for team in user_teams]
+    return team_info
+      
+
+
+
 
 

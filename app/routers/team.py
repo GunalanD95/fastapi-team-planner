@@ -5,7 +5,7 @@ from fastapi import APIRouter ,  Depends
 # importing the db connection
 from db.db import  get_db
 from sqlalchemy.orm import Session
-from ..schemas.schemas import TeamCreateResponse
+from ..schemas.schemas import TeamCreateResponse , AddUserTeam , RemoveUserTeam
 from ..repos import team
 
 team_router = APIRouter(
@@ -33,16 +33,16 @@ async def update_team(id: int ,request: TeamCreateResponse , db: Session = Depen
     return team.update_team(id, request, db)
 
 
-# @team_router.post('/teams/{id}/users')
-# async def add_users_to_team(id: int, users: list[str], db: Session = Depends(get_db)):
-#     return team.add_users_to_team(id, users, db)
+@team_router.post('/teams/{id}/users')
+async def add_users_to_team(request: AddUserTeam, db: Session = Depends(get_db)):
+    return team.add_users_to_team(request, db)
 
 
-# @team_router.delete('/teams/{id}/users')
-# async def remove_users_from_team(id: int, users: list[str], db: Session = Depends(get_db)):
-#     return team.remove_users_from_team(id, users, db)
+@team_router.delete('/teams/{id}/users')
+async def remove_users_from_team(request : RemoveUserTeam, db: Session = Depends(get_db)):
+    return team.remove_users_from_team(request, db)
 
 
-# @team_router.get('/teams/{id}/users')
-# async def list_team_users(id: int, db: Session = Depends(get_db)):
-#     return team.list_team_users(id, db)
+@team_router.get('/teams/{id}/users')
+async def list_team_users(id: int, db: Session = Depends(get_db)):
+    return team.list_team_users(id, db)

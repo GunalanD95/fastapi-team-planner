@@ -37,3 +37,12 @@ class TeamUserListResponse(BaseModel):
     id: str
     name: str
     display_name: Optional[str]
+
+
+class AddUserTeam(BaseModel):
+    team_id : str 
+    users: List[str]
+
+class RemoveUserTeam(BaseModel):
+    team_id : str 
+    users: List[str]
