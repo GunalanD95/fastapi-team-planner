@@ -4,6 +4,7 @@ sys.path.append("...")
 from db.db import Base
 from sqlalchemy import Column, Integer, String, DateTime , Float , Sequence ,  ForeignKey , Table
 from sqlalchemy.orm import relationship 
+from enum import Enum
 
 
 # Association table for user-team relationship
@@ -34,3 +35,34 @@ class TeamModel(Base):
 
     # Define one-to-many relationship between Team and User models
     members = relationship("UserModel", secondary=team_users, back_populates="teams")
+    projects = relationship("ProjectModel", back_populates="team")
+
+
+
+
+class ProjectModel(Base):
+    __tablename__ = 'projects'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(64), unique=True, index=True)
+    description = Column(String(128))
+    creation_time = Column(DateTime)
+    team_id = Column(Integer, ForeignKey('teams.id'))
+    status    = Column(String,default='Open')
+    tasks = relationship("TaskModel", back_populates="project")
+    team = relationship("TeamModel", back_populates="projects")
+    end_time = Column(DateTime)
+
+
+class TaskModel(Base):
+    __tablename__ = 'tasks'
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(64), index=True)
+    description = Column(String(128))
+    creation_time = Column(DateTime)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    project_id = Column(Integer, ForeignKey('projects.id'))
+
+    project = relationship("ProjectModel", back_populates="tasks")
+    status    = Column(String,default='Open')

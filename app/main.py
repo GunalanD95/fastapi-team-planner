@@ -4,7 +4,7 @@ sys.path.append("..")
 from fastapi import FastAPI
 from db import db
 from .models import models
-from .routers import user , team
+from .routers import user , team , project
 
 app = FastAPI()
 
@@ -22,3 +22,4 @@ def home():
 # register all routers
 app.include_router(user.user_router)
 app.include_router(team.team_router)
+app.include_router(project.project_router)

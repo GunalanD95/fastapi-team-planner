@@ -46,3 +46,28 @@ class AddUserTeam(BaseModel):
 class RemoveUserTeam(BaseModel):
     team_id : str 
     users: List[str]
+
+
+
+# project
+
+class BoardCreateResponse(BaseModel):
+    name: str
+    description: Optional[str]
+    team_id: str
+
+
+class TaskCreateRequest(BaseModel):
+    title: str
+    description: Optional[str] = None
+    user_id: int
+
+
+class AddTask(BaseModel):
+    name : str
+    description : str
+    team_id : str
+
+class UpdateTask(BaseModel):
+    task_id : int 
+    status  : str 
